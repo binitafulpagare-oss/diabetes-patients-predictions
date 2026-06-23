@@ -11,10 +11,14 @@ import pandas as pd
 import numpy as np
 import pickle
 import streamlit as st
+import joblib
 
 st.title('Diabetes Prediction App (Logistic Regression)')
 
 st.sidebar.header('User Input Parameters')
+
+model = joblib.load("diabetes_model.pkl")
+scaler = joblib.load("scaler.pkl")
 
 model = pickle.load(open('diabetes_model.pkl', 'rb'))
 scaler = pickle.load(open('scaler.pkl', 'rb'))
