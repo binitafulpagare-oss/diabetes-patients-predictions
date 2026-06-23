@@ -16,6 +16,9 @@ st.title('Diabetes Prediction App (Logistic Regression)')
 
 st.sidebar.header('User Input Parameters')
 
+pickle.dump(model, open("diabetes_model.pkl", "wb"))
+pickle.dump(scaler, open("scaler.pkl", "wb"))
+
 model = pickle.load(open('diabetes_model.pkl', 'rb'))
 scaler = pickle.load(open('scaler.pkl', 'rb'))
 
