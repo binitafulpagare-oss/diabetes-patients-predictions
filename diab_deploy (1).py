@@ -8,13 +8,17 @@ Original file is located at
 """
 
 import pandas as pd
+import numpy as np
 import pickle
 import streamlit as st
 
 st.title('Diabetes Prediction App (Logistic Regression)')
+
 st.sidebar.header('User Input Parameters')
 
-# Input function
+model = pickle.load(open('diabetes_model.pkl', 'rb'))
+scaler = pickle.load(open('scaler.pkl', 'rb'))
+
 def user_input_features():
     pregnancies = st.sidebar.number_input('Pregnancies', min_value=0)
     glucose = st.sidebar.number_input('Glucose', min_value=0)
@@ -38,44 +42,16 @@ def user_input_features():
 
     return pd.DataFrame(data, index=[0])
 
-df = pd.read_csv(r"C:\Users\rutur\Downloads\diabetes (1).csv")
-
-X = df.drop("Outcome", axis=1)
-y = df["Outcome"]
-
-
 df = user_input_features()
 
 st.subheader('User Input Parameters')
 st.write(df)
 
-# ✅ Load model & scaler
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-model = LogisticRegression()
-model.fit(X_scaled, y)
-
-# Save files
-pickle.dump(model, open(r"C:\Users\rutur\Downloads\model.pkl", 'wb'))
-pickle.dump(scaler, open(r"C:\Users\rutur\Downloads\scaler.pkl", 'wb'))
-
-print("Files saved successfully")
-model = pickle.load(open(r"C:\Users\rutur\Downloads\model.pkl", 'rb'))
-scaler = pickle.load(open(r"C:\Users\rutur\Downloads\scaler.pkl", 'rb'))
-
-
-
-# ✅ Transform only (NO fit)
 scaled_data = scaler.transform(df)
 
-# Prediction
 prediction = model.predict(scaled_data)
 prediction_proba = model.predict_proba(scaled_data)
 
-# Output
 st.subheader('Prediction Result')
 
 if prediction[0] == 1:
